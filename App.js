@@ -16,6 +16,11 @@ export default function Draw() {
   console.log("user points 1 =>", coordinates[1]);
   console.log("strokes =>", coordinates?.length);
 
+  const undoLastStroke = () => {
+    setPaths((prev) => prev.slice(0, -1));
+    setCoordinates((prev) => prev.slice(0, -1));
+  };
+
   const startPath = (x, y) => {
     setPaths((prev) => [
       ...prev,
@@ -83,8 +88,17 @@ export default function Draw() {
               />
             ))}
           </Canvas>
-          <View style={{ position: "absolute", top: 50, right: 20 }}>
+          <View
+            style={{
+              position: "absolute",
+              top: 50,
+              right: 20,
+              display: "flex",
+              gap: 10,
+            }}
+          >
             <Button title="Reset" onPress={clearPaths} color="#ef476f" />
+            <Button title="Undo" onPress={undoLastStroke} color="#ffd166" />
           </View>
         </View>
       </GestureDetector>
