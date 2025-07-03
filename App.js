@@ -10,6 +10,11 @@ import { runOnJS } from "react-native-reanimated";
 
 export default function Draw() {
   const [paths, setPaths] = useState([]);
+  const [coordinates, setCoordinates] = useState([]);
+
+  console.log("user points 0 =>", coordinates[0]);
+  console.log("user points 1 =>", coordinates[1]);
+  console.log("strokes =>", coordinates?.length);
 
   const startPath = (x, y) => {
     setPaths((prev) => [
@@ -24,17 +29,33 @@ export default function Draw() {
   const updatePath = (x, y) => {
     setPaths((prev) => {
       const newPaths = [...prev];
-      console.log("paths", newPaths?.[0].segments);
+      // console.log("paths", newPaths);
+      // const coordinates = paths.map((path) => {
+      //   return newPaths.segments.map((segment) => {
+      //     const [, x, y] = segment.split(" ");
+      //     return [parseFloat(x), parseFloat(y)];
+      //   });
+      // });
+
+      // console.log(coordinates);
       const index = newPaths.length - 1;
       if (newPaths[index]) {
         newPaths[index].segments.push(`L ${x} ${y}`);
       }
       return newPaths;
     });
+    const coordinates = paths.map((path) => {
+      return path.segments.map((segment) => {
+        const [, x, y] = segment.split(" ");
+        return [parseFloat(x), parseFloat(y)];
+      });
+    });
+    setCoordinates(coordinates);
   };
 
   const clearPaths = () => {
     setPaths([]);
+    setCoordinates([]);
   };
 
   const pan = Gesture.Pan()
